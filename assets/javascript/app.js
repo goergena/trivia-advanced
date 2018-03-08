@@ -1,46 +1,5 @@
 $(document).ready(function () {
 
-    $("#start-button").on("click", function () {
-        timedGame.start();
-    });
-
-    $(document).on("click", ".ans", function () {
-        timedGame.stop();
-        var input = $(this).val();
-        if (input === "1") {
-            correctAnswers++;
-            unanswered--;
-            $("#area1").text("Correct!");
-        } else {
-            incorrectAnswers++;
-            unanswered--;
-            $("#area1").text("Nope!");
-        }
-    });
-
-    function nextQuestion() {
-        i++;
-        console.log(i);
-        if (i === totalQuestions) {
-            gameOver();
-        } else {
-            timedGame.start();
-        }
-    };
-
-    function gameOver() {
-        $("#area1").empty();
-        $("#area2").empty();
-        var a = $("<div>");
-        var b = $("<div>");
-        var c = $("<div>");
-        a.text("Correct: " + correctAnswers);
-        b.text("Incorrect: " + incorrectAnswers);
-        c.text("Unanswered: " + unanswered);
-        $("#area1").text("Game over!");
-        $("#area2").append(a, b, c);
-    }
-
     var questions = [{
             question: "How many bedrooms are in the Dursley's house?",
             answerArray: [{
@@ -54,8 +13,7 @@ $(document).ready(function () {
                 val: 1
             }, ],
             response: "There are 4 bedrooms in the Dursley house!"
-        },
-        {
+        },  {
             question: "How much gold do Fred and George bet at the Quidditch World Cup?",
             answerArray: [{
                 answer: "33 Galleons",
@@ -71,8 +29,7 @@ $(document).ready(function () {
                 val: 0
             }, ],
             response: "They bet 37 Galleons, x sickles and y knuts!"
-        },
-        {
+        }, {
             question: "Hermione founds an organization called the 'House Elf Liberation Front'",
             answerArray: [{
                 answer: "true",
@@ -82,8 +39,7 @@ $(document).ready(function () {
                 val: 1
             }, ],
             response: "It was definitely called S.P.E.W."
-        },
-        {
+        },  {
             question: "Where is the Riddle house?",
             answerArray: [{
                 answer: "Little Whinging",
@@ -96,8 +52,7 @@ $(document).ready(function () {
                 val: 0
             }],
             response: "The Riddle House is in Little Hangleton!"
-        },
-        {
+        },  {
             question: "Which is the fake house elf?",
             answerArray: [{
                 answer: "Dobby",
@@ -113,8 +68,7 @@ $(document).ready(function () {
                 val: 0
             }, ],
             response: "Hokey the House Elf served Hepzibah Smith! Pokey ain't real."
-        },
-        {
+        },  {
             question: "How many challenges protect the Sorcerer's Stone??",
             answerArray: [{
                 answer: "4",
@@ -130,8 +84,7 @@ $(document).ready(function () {
                 val: 1,
             }, ],
             response: "7! Don't forget about Quirrel's troll!"
-        },
-        {
+        },  {
             question: "Which is NOT a statue in Hogwarts?",
             answerArray: [{
                 answer: "Gregory the Smarmy",
@@ -148,13 +101,15 @@ $(document).ready(function () {
             }, ],
             response: "Urg the Unclean fought in the Goblin rebellions!"
         },
-    ];
+      ];
 
     function displayQuestion(x) {
+        //goes through question array to display question object
         var display = $("<div>");
         var displayQuestion = $("<h4>");
         displayQuestion.text(questions[i].question);
         display.append(displayQuestion);
+        //finds answers in question array, displays answers as buttons with values 
         for (j = 0; j < questions[i].answerArray.length; j++) {
             var displayAns = $("<button>");
             displayAns.addClass("btn btn-outline-primary ans");
@@ -163,22 +118,22 @@ $(document).ready(function () {
             display.append(displayAns);
         }
         $("#area1").append(display);
-
     };
 
     var totalQuestions = questions.length;
     var correctAnswers = 0;
     var incorrectAnswers = 0;
     var unanswered = totalQuestions;
+    // i indicates which question of the questions array we are on.
     var i = 0;
     var time = 15;
     var intervalId;
     var clockRunning = false;
+
     var timedGame = {
         //starts game
         start: function () {
-            $("#area1").empty();
-            $("#area2").empty();
+            $("#area1, #area2").empty();
             displayQuestion(i);
             $("#timer").text("15");
             //starts countdown
@@ -187,23 +142,22 @@ $(document).ready(function () {
                 clockRunning = true;
             }
         },
-        //when the game stops: (1) the timer stops, (2) results are calculated and (3) results are displayed
+        //when the game stops: (1) the timer stops, (2) question, timer and answers are cleared 
+        //(3)response is displayed for 3 seconds  (4) time reset to 15 seconds
         stop: function () {
             setTimeout(nextQuestion, 1000 * 3);
             clearInterval(intervalId);
             clockRunning = false;
-            $("#area1").empty();
-            $("#area2").empty();
-            $("#timer").empty();
+            $("#area1, #area2, #timer").empty();
             $("#area2").text(questions[i].response);
             time = 15;
         },
-
         countdown: function () {
             //decrements time down
             time--;
             $("#timer").text(time);
-            //countdown stops when time is out
+            //countdown stops when time is out, 
+            //and player receives response + "did not answer" msg.
             if (time === 0) {
                 timedGame.stop();
                 $("#area1").text("You didn't answer!");
@@ -211,4 +165,45 @@ $(document).ready(function () {
         },
     };
 
+    $("#start-button").on("click", function () {
+        timedGame.start();
+    });
+
+    $(document).on("click", ".ans", function () {
+        timedGame.stop();
+        unanswered--;
+        var input = $(this).val();
+        if (input === "1") {
+            correctAnswers++;
+            $("#area1").text("Correct!");
+        } else {
+            incorrectAnswers++;
+            $("#area1").text("Nope!");
+        }
+    });
+
+//var i indicates which question of the questions array we are on. 
+//next question is called in a 3-second timeout when the response is displayed.
+//each time next question is out, i increments up, so that the next item in the array is called.
+    function nextQuestion() {
+        i++;
+        //when you call all the items in the questions array, the gameover function runs. 
+        if (i === totalQuestions) {
+            gameOver();
+        } else {
+            timedGame.start();
+        }
+    };
+
+    function gameOver() {
+        $("#area1, #area2").empty();
+        var a = $("<div>");
+        var b = $("<div>");
+        var c = $("<div>");
+        a.text("Correct: " + correctAnswers);
+        b.text("Incorrect: " + incorrectAnswers);
+        c.text("Unanswered: " + unanswered);
+        $("#area1").text("Game over!");
+        $("#area2").append(a, b, c);
+    }
 });
