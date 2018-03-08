@@ -21,7 +21,7 @@ $(document).ready(function () {
     function nextQuestion() {
         i++;
         console.log(i);
-        if (i===7) {
+        if (i === totalQuestions) {
             gameOver();
         } else {
             timedGame.start();
@@ -41,119 +41,136 @@ $(document).ready(function () {
         $("#area2").append(a, b, c);
     }
 
-    var correctAnswers = 0;
-    var incorrectAnswers = 0;
-    var unanswered = 7;
-    var i = 0;
-
-    var questions = [
-         {
+    var questions = [{
             question: "How many bedrooms are in the Dursley's house?",
-            answer1: {
+            answerArray: [{
+                answer: "2",
+                val: 0
+            }, {
                 answer: "3",
                 val: 0
-            },
-            answer2: {
+            }, {
                 answer: "4",
                 val: 1
-            },
+            }, ],
             response: "There are 4 bedrooms in the Dursley house!"
         },
-         {
+        {
             question: "How much gold do Fred and George bet at the Quidditch World Cup?",
-            answer1: {
+            answerArray: [{
+                answer: "33 Galleons",
+                val: 0
+            }, {
+                answer: "35 Galleons",
+                val: 0
+            }, {
                 answer: "37 Galleons",
                 val: 1
-            },
-            answer2: {
+            }, {
                 answer: "39 Galleons",
                 val: 0
-            },
+            }, ],
             response: "They bet 37 Galleons, x sickles and y knuts!"
         },
-         {
+        {
             question: "Hermione founds an organization called the 'House Elf Liberation Front'",
-            answer1: {
+            answerArray: [{
                 answer: "true",
                 val: 0
-            },
-            answer2: {
+            }, {
                 answer: "false",
                 val: 1
-            },
+            }, ],
             response: "It was definitely called S.P.E.W."
         },
-         {
+        {
             question: "Where is the Riddle house?",
-            answer1: {
+            answerArray: [{
                 answer: "Little Whinging",
                 val: 0
-            },
-            answer2: {
+            }, {
                 answer: "Little Hangleton",
                 val: 1
-            },
+            }, {
+                answer: "Ottery St. Catchpole",
+                val: 0
+            }],
             response: "The Riddle House is in Little Hangleton!"
         },
-         {
+        {
             question: "Which is the fake house elf?",
-            answer1: {
+            answerArray: [{
+                answer: "Dobby",
+                val: 0
+            }, {
+                answer: "Winky",
+                val: 0
+            }, {
                 answer: "Pokey",
                 val: 1
-            },
-            answer2: {
+            }, {
                 answer: "Hokey",
                 val: 0
-            },
-            response: "Hokey the House Elf served Hepzibah Smith!"
+            }, ],
+            response: "Hokey the House Elf served Hepzibah Smith! Pokey ain't real."
         },
         {
             question: "How many challenges protect the Sorcerer's Stone??",
-            answer1: {
-                answer: "6",
+            answerArray: [{
+                answer: "4",
                 val: 0
-            },
-            answer2: {
+            }, {
+                answer: "5",
+                val: 0
+            }, {
+                answer: "6",
+                val: 0,
+            }, {
                 answer: "7",
-                val: 1
-            }, 
+                val: 7
+            }, ],
             response: "7! Don't forget about Quirrel's troll!"
         },
-         {
-            question: "Which is a statue in Hogwarts?",
-            answer1: {
+        {
+            question: "Which is NOT a statue in Hogwarts?",
+            answerArray: [{
                 answer: "Gregory the Smarmy",
-                val: 1
-            },
-            answer2: {
-                answer: "Urg the Unclean",
                 val: 0
-            },
-            response: "Gregory the Smarmy guards the boys prefects bathroom!"
+            }, {
+                answer: "Urg the Unclean",
+                val: 1
+            }, {
+                answer: "Boris the Bewildered",
+                val: 0
+            }, {
+                answer: "Gunhilda de Gorsemoor",
+                val: 0
+            }, ],
+            response: "Urg the Unclean fought in the Goblin rebellions!"
         },
-    ]
+    ];
 
-function displayQuestion(x) {
-    var display = $("<div>");
-    var displayQuestion = $("<h4>");
-    var displayAns1 = $("<button>");
-    displayAns1.addClass("btn btn-outline-primary ans");
-    var displayAns2 = $("<button>");
-    displayAns2.addClass("btn btn-outline-primary ans");
-    displayQuestion.text(questions[i].question);
-    displayAns1.text(questions[i].answer1.answer);
-    displayAns1.val(questions[i].answer1.val);
-    displayAns2.text(questions[i].answer2.answer);
-    displayAns2.val(questions[i].answer2.val);
-    display.append(displayQuestion, displayAns1, displayAns2);
-    $("#area1").append(display);
+    function displayQuestion(x) {
+        var display = $("<div>");
+        var displayQuestion = $("<h4>");
+        displayQuestion.text(questions[i].question);
+        display.append(displayQuestion);
+        for (j = 0; j < questions[i].answerArray.length; j++) {
+            var displayAns = $("<button>");
+            displayAns.addClass("btn btn-outline-primary ans");
+            displayAns.text(questions[i].answerArray[j].answer);
+            displayAns.val(questions[i].answerArray[j].val);
+            display.append(displayAns);
+        }
+        $("#area1").append(display);
 
-}
-//yo Ali! put those answers in an array inside  your object
-//inside your array so that you can loop through like a baller 
-//and add the button, class, answer, val!
-//great idea! just like, not right now.
+    };
 
+    var totalQuestions = questions.length;
+    var correctAnswers = 0;
+    var incorrectAnswers = 0;
+    var unanswered = totalQuestions;
+    var i = 0;
     var time = 15;
     var intervalId;
     var clockRunning = false;
@@ -179,7 +196,7 @@ function displayQuestion(x) {
             $("#area2").empty();
             $("#timer").empty();
             $("#area2").text(questions[i].response);
-           time= 15;
+            time = 15;
         },
 
         countdown: function () {
