@@ -1,34 +1,53 @@
 $(document).ready(function () {
 
-    $("#submit-button").on("click", function () {
-        timedGame.stop();
-    });
-
     $("#start-button").on("click", function () {
         timedGame.start();
-        $("#area1").empty();
-        $("#area2").empty();
-        displayQuestion(i);
     });
 
-    $(".btn-ans").on("click", function () {
+    $(document).on("click", ".ans", function () {
+        setTimeout(nextQuestion, 1000 * 3);
         timedGame.stop();
-        if ($(this).val() === 1) {
-            console.log("correct");
+        var input = $(this).val();
+        if (input === "1") {
             correctAnswers++;
             unanswered--;
-        } else if ($(this).val() === 0) {
-            console.log("you did not select the correct dude");
+            $("#area1").text("Correct!");
+        } else {
             incorrectAnswers++;
             unanswered--;
+            $("#area1").text("Nope!");
         }
 
-
     });
+
+    function nextQuestion() {
+        i++;
+        console.log(i);
+        if (i===7) {
+            gameOver();
+        } else {
+            timedGame.start();
+        }
+
+    };
+
+    function gameOver() {
+        $("#area1").empty();
+        $("#area2").empty();
+        var a = $("<div>");
+        var b = $("<div>");
+        var c = $("<div>");
+        a.text("Correct: " + correctAnswers);
+        b.text("Incorrect: " + incorrectAnswers);
+        c.text("Unanswered: " + unanswered);
+        $("#area1").text("Game over!");
+        $("#area2").append(a, b, c);
+
+    }
 
     var correctAnswers = 0;
     var incorrectAnswers = 0;
-    var unanswered = 10;
+    var unanswered = 7;
 
 
     var questions = [
@@ -41,7 +60,8 @@ $(document).ready(function () {
             answer2: {
                 answer: "4",
                 val: 1
-            }
+            },
+            response: "There are 4 bedrooms in the Dursley house!"
 
         },
          {
@@ -53,7 +73,8 @@ $(document).ready(function () {
             answer2: {
                 answer: "39 Galleons",
                 val: 0
-            }
+            },
+            response: "They bet 37 Galleons, x sickles and y knuts!"
 
         },
          {
@@ -65,11 +86,12 @@ $(document).ready(function () {
             answer2: {
                 answer: "false",
                 val: 1
-            }
+            },
+            response: "It was definitely called S.P.E.W."
 
         },
          {
-            question: "WHere is the Riddle house?",
+            question: "Where is the Riddle house?",
             answer1: {
                 answer: "Little Whinging",
                 val: 0
@@ -77,7 +99,8 @@ $(document).ready(function () {
             answer2: {
                 answer: "Little Hangleton",
                 val: 1
-            }
+            },
+            response: "The Riddle House is in Little Hangleton!"
 
         },
          {
@@ -89,7 +112,8 @@ $(document).ready(function () {
             answer2: {
                 answer: "Hokey",
                 val: 1
-            }
+            },
+            response: "Hokey the House Elf served Hepzibah Smith!"
 
         },
         {
@@ -101,7 +125,8 @@ $(document).ready(function () {
             answer2: {
                 answer: "7",
                 val: 1
-            }
+            }, 
+            response: "7! Don't forget about Quirrel's troll!"
 
         },
          {
@@ -113,7 +138,8 @@ $(document).ready(function () {
             answer2: {
                 answer: "Urg the Unclean",
                 val: 0
-            }
+            },
+            response: "Gregory the Smarmy guards the boys prefects bathroom!"
 
         },
 
@@ -124,28 +150,35 @@ function displayQuestion(x) {
     var display = $("<div>");
     var displayQuestion = $("<h4>");
     var displayAns1 = $("<button>");
-    displayAns1.addClass("btn btn-outline-primary btn-ans");
+    displayAns1.addClass("btn btn-outline-primary ans");
     var displayAns2 = $("<button>");
-    displayAns2.addClass("btn btn-outline-primary btn-ans");
+    displayAns2.addClass("btn btn-outline-primary ans");
     displayQuestion.text(questions[i].question);
     displayAns1.text(questions[i].answer1.answer);
-    displayAns1.val(questions[i].val);
+    displayAns1.val(questions[i].answer1.val);
     displayAns2.text(questions[i].answer2.answer);
     displayAns2.val(questions[i].answer2.val);
     display.append(displayQuestion, displayAns1, displayAns2);
     $("#area1").append(display);
 
 }
+//yo Ali! put those answers in an array inside  your object
+//inside your array so that you can loop through like a baller 
+//and add the button, class, answer, val!
+//great idea! just like, not right now.
 
-
-
+    var time = 15;
     var intervalId;
     var clockRunning = false;
     var timedGame = {
-        //sets time to 300 seconds
-        time: 300,
+        //sets time to 30 seconds
+       // time: 30,
         //starts game
         start: function () {
+            $("#area1").empty();
+            $("#area2").empty();
+            displayQuestion(i);
+            $("#timer").text("15");
             //starts countdown
             if (!clockRunning) {
                 intervalId = setInterval(timedGame.countdown, 1000);
@@ -156,18 +189,25 @@ function displayQuestion(x) {
         stop: function () {
             clearInterval(intervalId);
             clockRunning = false;
+            $("#area1").empty();
+            $("#area2").empty();
+            $("#timer").empty();
+            $("#area2").text(questions[i].response);
+            $("#area1").text("You didn't answer!");
            // calculateResults();
            // displayThe.results();
+           time= 15;
         },
+
 
         countdown: function () {
             //decrements time down
-            timedGame.time--;
+            time--;
             //converts current time to minutes and displays it
-            var currentTime = timedGame.timeConverter(timedGame.time);
+            var currentTime = timedGame.timeConverter(time);
             $("#timer").text(currentTime);
             //countdown stops when time is out
-            if (timedGame.time === 0) {
+            if (time === 0) {
                 timedGame.stop();
             }
         },
@@ -188,30 +228,5 @@ function displayQuestion(x) {
         }
     };
 
-    /*
-
-
-    function calculateResults() {
-
-        correctAnswers += $("input[type=radio][value=correct]:checked").length;
-        incorrectAnswers += $("input[type=radio][value=option]:checked").length;
-        unanswered -= $("input[type=radio]:checked").length;
-    };
-
-    var displayThe = {
-        questions: function () {
-            $("#trivia").removeClass("hidden");
-            $("#start-button").addClass("hidden");
-        },
-        results: function () {
-            $("#trivia").empty();
-            var resultText =
-                "<h2>Correct: " + correctAnswers + " </h2> " +
-                "<h2>Incorrect: " + incorrectAnswers + " </h2> " +
-                "<h2>Unanswered: " + unanswered + " </h2>";
-
-            $(".jumbotron").html(resultText);
-        }
-    }; */
 
 });
