@@ -216,13 +216,14 @@ $(document).ready(function () {
     };
 
     $(document).on("click", "#restart", function () {
+        //reset question counter
         i=0;
+        //reset scores
         correctAnswers = 0;
         incorrectAnswers = 0;
         unanswered = totalQuestions;
+        //now you can start the game over from the beginning
         timedGame.start();
     });
-
-
 
 });
