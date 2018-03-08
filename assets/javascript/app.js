@@ -5,7 +5,6 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".ans", function () {
-        setTimeout(nextQuestion, 1000 * 3);
         timedGame.stop();
         var input = $(this).val();
         if (input === "1") {
@@ -17,7 +16,6 @@ $(document).ready(function () {
             unanswered--;
             $("#area1").text("Nope!");
         }
-
     });
 
     function nextQuestion() {
@@ -28,7 +26,6 @@ $(document).ready(function () {
         } else {
             timedGame.start();
         }
-
     };
 
     function gameOver() {
@@ -42,13 +39,12 @@ $(document).ready(function () {
         c.text("Unanswered: " + unanswered);
         $("#area1").text("Game over!");
         $("#area2").append(a, b, c);
-
     }
 
     var correctAnswers = 0;
     var incorrectAnswers = 0;
     var unanswered = 7;
-
+    var i = 0;
 
     var questions = [
          {
@@ -62,7 +58,6 @@ $(document).ready(function () {
                 val: 1
             },
             response: "There are 4 bedrooms in the Dursley house!"
-
         },
          {
             question: "How much gold do Fred and George bet at the Quidditch World Cup?",
@@ -75,7 +70,6 @@ $(document).ready(function () {
                 val: 0
             },
             response: "They bet 37 Galleons, x sickles and y knuts!"
-
         },
          {
             question: "Hermione founds an organization called the 'House Elf Liberation Front'",
@@ -88,7 +82,6 @@ $(document).ready(function () {
                 val: 1
             },
             response: "It was definitely called S.P.E.W."
-
         },
          {
             question: "Where is the Riddle house?",
@@ -101,7 +94,6 @@ $(document).ready(function () {
                 val: 1
             },
             response: "The Riddle House is in Little Hangleton!"
-
         },
          {
             question: "Which is the fake house elf?",
@@ -114,7 +106,6 @@ $(document).ready(function () {
                 val: 0
             },
             response: "Hokey the House Elf served Hepzibah Smith!"
-
         },
         {
             question: "How many challenges protect the Sorcerer's Stone??",
@@ -127,7 +118,6 @@ $(document).ready(function () {
                 val: 1
             }, 
             response: "7! Don't forget about Quirrel's troll!"
-
         },
          {
             question: "Which is a statue in Hogwarts?",
@@ -140,11 +130,8 @@ $(document).ready(function () {
                 val: 0
             },
             response: "Gregory the Smarmy guards the boys prefects bathroom!"
-
         },
-
     ]
-var i = 0;
 
 function displayQuestion(x) {
     var display = $("<div>");
@@ -171,8 +158,6 @@ function displayQuestion(x) {
     var intervalId;
     var clockRunning = false;
     var timedGame = {
-        //sets time to 30 seconds
-       // time: 30,
         //starts game
         start: function () {
             $("#area1").empty();
@@ -187,48 +172,26 @@ function displayQuestion(x) {
         },
         //when the game stops: (1) the timer stops, (2) results are calculated and (3) results are displayed
         stop: function () {
+            setTimeout(nextQuestion, 1000 * 3);
             clearInterval(intervalId);
             clockRunning = false;
             $("#area1").empty();
             $("#area2").empty();
             $("#timer").empty();
             $("#area2").text(questions[i].response);
-            
-           // calculateResults();
-           // displayThe.results();
            time= 15;
         },
-
 
         countdown: function () {
             //decrements time down
             time--;
-            //converts current time to minutes and displays it
-            var currentTime = timedGame.timeConverter(time);
-            $("#timer").text(currentTime);
+            $("#timer").text(time);
             //countdown stops when time is out
             if (time === 0) {
-                setTimeout(nextQuestion, 1000 * 3);
                 timedGame.stop();
                 $("#area1").text("You didn't answer!");
             }
         },
-
-        timeConverter: function (t) {
-            //it's convenient to have this function available to other timers 
-
-            var minutes = Math.floor(t / 60);
-            var seconds = t - (minutes * 60);
-
-            if (seconds < 10) {
-                seconds = "0" + seconds;
-            }
-            if (minutes === 0) {
-                minutes = "0";
-            }
-            return minutes + ":" + seconds;
-        }
     };
-
 
 });
