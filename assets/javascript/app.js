@@ -205,5 +205,24 @@ $(document).ready(function () {
         c.text("Unanswered: " + unanswered);
         $("#area1").text("Game over!");
         $("#area2").append(a, b, c);
+        generateRestartBtn();
     }
+    function generateRestartBtn() {
+        var restartBtn = $("<button>");
+        restartBtn.attr("id", "restart");
+        restartBtn.addClass("btn btn-secondary");
+        restartBtn.text("Play again!");
+        $("#area2").append(restartBtn);
+    };
+
+    $(document).on("click", "#restart", function () {
+        i=0;
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+        unanswered = totalQuestions;
+        timedGame.start();
+    });
+
+
+
 });
