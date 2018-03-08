@@ -127,7 +127,7 @@ $(document).ready(function () {
                 val: 0,
             }, {
                 answer: "7",
-                val: 7
+                val: 1,
             }, ],
             response: "7! Don't forget about Quirrel's troll!"
         },
