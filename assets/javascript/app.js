@@ -106,13 +106,13 @@ $(document).ready(function () {
     function displayQuestion(x) {
         //goes through question array to display question object
         var display = $("<div>");
-        var displayQuestion = $("<h4>");
+        var displayQuestion = $("<h3>");
         displayQuestion.text(questions[i].question);
         display.append(displayQuestion);
         //finds answers in question array, displays answers as buttons with values 
         for (j = 0; j < questions[i].answerArray.length; j++) {
             var displayAns = $("<button>");
-            displayAns.addClass("btn btn-outline-primary ans");
+            displayAns.addClass("btn btn-outline-secondary ans");
             displayAns.text(questions[i].answerArray[j].answer);
             displayAns.val(questions[i].answerArray[j].val);
             display.append(displayAns);
@@ -126,7 +126,7 @@ $(document).ready(function () {
     var unanswered = totalQuestions;
     // i indicates which question of the questions array we are on.
     var i = 0;
-    var time = 15;
+    var time = 20;
     var intervalId;
     var clockRunning = false;
 
@@ -135,7 +135,7 @@ $(document).ready(function () {
         start: function () {
             $("#area1, #area2").empty();
             displayQuestion(i);
-            $("#timer").text("15");
+            $("#timer").text("20");
             //starts countdown
             if (!clockRunning) {
                 intervalId = setInterval(timedGame.countdown, 1000);
@@ -149,8 +149,8 @@ $(document).ready(function () {
             clearInterval(intervalId);
             clockRunning = false;
             $("#area1, #area2, #timer").empty();
-            $("#area2").text(questions[i].response);
-            time = 15;
+            $("#area2").html("<h4>" + questions[i].response + "</h4>");
+            time = 20;
         },
         countdown: function () {
             //decrements time down
@@ -160,7 +160,7 @@ $(document).ready(function () {
             //and player receives response + "did not answer" msg.
             if (time === 0) {
                 timedGame.stop();
-                $("#area1").text("You didn't answer!");
+                $("#area1").html("<h3>You didn't answer!</h3>");
             }
         },
     };
@@ -175,10 +175,10 @@ $(document).ready(function () {
         var input = $(this).val();
         if (input === "1") {
             correctAnswers++;
-            $("#area1").text("Correct!");
+            $("#area1").html("<h3>Correct!</h3>");
         } else {
             incorrectAnswers++;
-            $("#area1").text("Nope!");
+            $("#area1").html("<h3>Nope!</h3>");
         }
     });
 
