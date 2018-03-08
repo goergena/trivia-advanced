@@ -107,11 +107,11 @@ $(document).ready(function () {
             question: "Which is the fake house elf?",
             answer1: {
                 answer: "Pokey",
-                val: 0
+                val: 1
             },
             answer2: {
                 answer: "Hokey",
-                val: 1
+                val: 0
             },
             response: "Hokey the House Elf served Hepzibah Smith!"
 
@@ -193,7 +193,7 @@ function displayQuestion(x) {
             $("#area2").empty();
             $("#timer").empty();
             $("#area2").text(questions[i].response);
-            $("#area1").text("You didn't answer!");
+            
            // calculateResults();
            // displayThe.results();
            time= 15;
@@ -208,7 +208,9 @@ function displayQuestion(x) {
             $("#timer").text(currentTime);
             //countdown stops when time is out
             if (time === 0) {
+                setTimeout(nextQuestion, 1000 * 3);
                 timedGame.stop();
+                $("#area1").text("You didn't answer!");
             }
         },
 
